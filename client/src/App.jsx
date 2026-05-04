@@ -250,56 +250,75 @@ export default function App() {
     <div className="min-h-screen text-primary flex flex-col relative overflow-hidden">
 
       {/* HUD Header */}
-      <header className="p-6 flex justify-between items-start z-20 absolute top-0 left-0 right-0">
-        <div className="glass-panel px-4 py-2 rounded-xl text-center">
+      <header className="p-6 flex justify-between items-start z-20 absolute top-0 left-0 right-0 pointer-events-none">
+        <div className="glass-panel px-4 py-2 rounded-xl text-center pointer-events-auto">
           <span className="text-[10px] text-gold/70 font-bold tracking-widest uppercase">Room</span>
           <div className="font-mono text-lg text-white">{gameState.id}</div>
         </div>
       </header>
 
-      {/* Opponents Area (Top) */}
-      <div className="w-full flex justify-center gap-6 mt-6 z-10 relative">
-        {opponents.map(p => (
-            <div key={p.id} className={`glass-panel flex flex-col items-center px-6 py-3 rounded-2xl transition-all duration-300 w-32 ${p.id === gameState.players[gameState.currentTurnIndex]?.id ? 'border-gold shadow-[0_0_20px_rgba(212,175,55,0.4)] bg-deep-purple/40 scale-105' : 'border-deep-purple/50 opacity-80'}`}>
-                <div className="w-10 h-10 rounded-full bg-obsidian border-2 border-gold/50 flex items-center justify-center mb-2 shadow-inner">
-                    <span className="text-xs font-bold text-gold">{p.name.substring(0, 2).toUpperCase()}</span>
-                </div>
-                <span className="text-sm font-medium text-white truncate max-w-full mb-2">{p.name}</span>
-                <div className="flex gap-1.5 mt-auto">
-                {[...Array(3)].map((_, i) => (
-                    <div key={i} className={`w-2.5 h-2.5 rounded-full border ${i < p.penaltyPoints ? 'bg-red-500 border-red-400 shadow-[0_0_5px_rgba(239,68,68,0.8)]' : 'bg-transparent border-gold/30'}`} />
-                ))}
-                </div>
-                {p.id === gameState.players[gameState.currentTurnIndex]?.id && (
-                   <div className="absolute -bottom-2 w-12 h-1 bg-gold rounded-full shadow-[0_0_10px_rgba(212,175,55,1)]"></div>
-                )}
-            </div>
-        ))}
-      </div>
-
-      {/* Main Play Area (Center) */}
-      <main className="flex-1 flex flex-col items-center justify-center relative z-10 mt-12 mb-32">
+      {/* Main Play Area (Center Table) */}
+      <main className="flex-1 flex flex-col items-center justify-center relative z-10 mb-32 h-full w-full">
 
         {/* Play Table Surface */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div className="w-[600px] h-[600px] rounded-full bg-deep-purple/5 border border-gold/5 shadow-[inset_0_0_100px_rgba(15,10,26,1)] flex items-center justify-center">
-                 <div className="w-[400px] h-[400px] rounded-full border border-gold/10"></div>
+            <div className="w-[800px] h-[600px] rounded-[50%] bg-deep-purple/10 border border-gold/10 shadow-[inset_0_0_100px_rgba(15,10,26,1)] flex items-center justify-center relative">
+               {/* Inner Table Ring */}
+               <div className="w-[600px] h-[400px] rounded-[50%] border border-gold/5"></div>
             </div>
         </div>
 
-        <div className="flex flex-col md:flex-row items-center justify-center gap-12 md:gap-24">
+        {/* Opponents Area (Arranged around the table) */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+          {opponents.map((p, index) => {
+              // Calculate positions in an ellipse
+              const totalOpponents = opponents.length;
+              // Start angle at top (-90 degrees / -PI/2) and spread out.
+              // If 1 opponent, put at top. If more, spread along the top half of the table.
+              let angle;
+              if (totalOpponents === 1) {
+                  angle = -Math.PI / 2;
+              } else {
+                  // Distribute from -PI + PI/4 to -PI/4
+                  const startAngle = Math.PI + (Math.PI / 6);
+                  const sweep = Math.PI - (Math.PI / 3);
+                  angle = startAngle + (sweep * (index / (totalOpponents - 1)));
+              }
 
-            {/* Active Element Box */}
-            <div className="flex flex-col items-center relative z-10 glass-panel p-6 rounded-3xl">
-                <div className="absolute inset-0 rounded-3xl bg-deep-purple/10 blur-xl"></div>
-                <span className="text-xs text-gold/70 font-bold uppercase tracking-widest mb-4 drop-shadow-md relative z-10">Active Element</span>
-                <div className={`w-24 h-24 rounded-2xl border-4 flex items-center justify-center relative z-10 shadow-2xl ${getColorClasses(gameState.activeColor)}`}>
-                    {gameState.activeColor === 'sun' && <span className="text-5xl">☀️</span>}
-                    {gameState.activeColor === 'leaf' && <span className="text-5xl">🍃</span>}
-                    {gameState.activeColor === 'water' && <span className="text-5xl">💧</span>}
+              // Ellipse dimensions roughly matching the table UI
+              const rx = 350; // X radius
+              const ry = 200; // Y radius
+
+              const x = Math.cos(angle) * rx;
+              const y = Math.sin(angle) * ry - 50; // shift slightly up to leave room for bottom player
+
+              return (
+                <div
+                    key={p.id}
+                    className="absolute pointer-events-auto"
+                    style={{ transform: `translate(${x}px, ${y}px)` }}
+                >
+                    <div className={`glass-panel flex flex-col items-center px-6 py-3 rounded-2xl transition-all duration-300 w-32 ${p.id === gameState.players[gameState.currentTurnIndex]?.id ? 'border-gold shadow-[0_0_20px_rgba(212,175,55,0.4)] bg-deep-purple/40 scale-105' : 'border-deep-purple/50 opacity-80'}`}>
+                        <div className="w-10 h-10 rounded-full bg-obsidian border-2 border-gold/50 flex items-center justify-center mb-2 shadow-inner">
+                            <span className="text-xs font-bold text-gold">{p.name.substring(0, 2).toUpperCase()}</span>
+                        </div>
+                        <span className="text-sm font-medium text-white truncate max-w-full mb-2">{p.name}</span>
+                        <div className="flex gap-1.5 mt-auto">
+                        {[...Array(3)].map((_, i) => (
+                            <div key={i} className={`w-2.5 h-2.5 rounded-full border ${i < p.penaltyPoints ? 'bg-red-500 border-red-400 shadow-[0_0_5px_rgba(239,68,68,0.8)]' : 'bg-transparent border-gold/30'}`} />
+                        ))}
+                        </div>
+                        {p.id === gameState.players[gameState.currentTurnIndex]?.id && (
+                           <div className="absolute -bottom-2 w-12 h-1 bg-gold rounded-full shadow-[0_0_10px_rgba(212,175,55,1)]"></div>
+                        )}
+                    </div>
                 </div>
-            </div>
+              );
+          })}
+        </div>
 
+
+        <div className="flex flex-col items-center justify-center gap-8 relative z-20 top-[-20px]">
             {/* Center Pile */}
             <div className="relative w-48 h-64 flex flex-col items-center">
             {gameState.pile.length === 0 ? (
@@ -329,7 +348,7 @@ export default function App() {
                 {canChallenge && (
                     <button
                     onClick={handleChallenge}
-                    className="absolute -right-6 top-[80%] bg-gradient-to-r from-red-600 to-red-800 border-2 border-red-400 text-white font-bold py-3 px-6 rounded-full shadow-[0_0_20px_rgba(220,38,38,0.6)] transform transition hover:scale-105 active:scale-95 animate-bounce z-50 uppercase tracking-wider text-sm whitespace-nowrap"
+                    className="absolute -right-16 top-[60%] bg-gradient-to-r from-red-600 to-red-800 border-2 border-red-400 text-white font-bold py-3 px-6 rounded-full shadow-[0_0_20px_rgba(220,38,38,0.6)] transform transition hover:scale-105 active:scale-95 animate-bounce z-50 uppercase tracking-wider text-sm whitespace-nowrap"
                     >
                     Challenge!
                     </button>
@@ -339,7 +358,7 @@ export default function App() {
 
             {/* Last Move Info */}
             {gameState.lastMove && gameState.pile.length > 0 && (
-                <div className="absolute -bottom-20 left-1/2 -translate-x-1/2 whitespace-nowrap glass-panel px-5 py-3 rounded-full text-sm flex items-center gap-3 shadow-lg w-max z-20">
+                <div className="absolute -bottom-16 left-1/2 -translate-x-1/2 whitespace-nowrap glass-panel px-5 py-3 rounded-full text-sm flex items-center gap-3 shadow-lg w-max z-20">
                     <span className="text-primary/70">Last claim:</span>
                     <span className="font-bold text-white">{gameState.players.find(p=>p.id === gameState.lastMove.playerId)?.name}</span>
                     <span className="text-primary/70">declared</span>
@@ -348,10 +367,19 @@ export default function App() {
             )}
             </div>
 
+            {/* Active Element Box */}
+            <div className="flex flex-col items-center relative z-10 glass-panel px-4 py-2 rounded-2xl scale-75 mt-4">
+                <span className="text-[10px] text-gold/70 font-bold uppercase tracking-widest mb-2 drop-shadow-md relative z-10">Active Element</span>
+                <div className={`w-12 h-12 rounded-xl border-2 flex items-center justify-center relative z-10 shadow-lg ${getColorClasses(gameState.activeColor)}`}>
+                    {gameState.activeColor === 'sun' && <span className="text-2xl">☀️</span>}
+                    {gameState.activeColor === 'leaf' && <span className="text-2xl">🍃</span>}
+                    {gameState.activeColor === 'water' && <span className="text-2xl">💧</span>}
+                </div>
+            </div>
         </div>
 
         {/* Status Message */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 h-10 text-center flex items-center justify-center z-20 whitespace-nowrap w-full">
+        <div className="absolute bottom-16 left-1/2 -translate-x-1/2 h-10 text-center flex items-center justify-center z-20 whitespace-nowrap w-full">
           {isMyTurn ? (
              <span className="text-amber font-serif italic text-2xl drop-shadow-[0_0_10px_rgba(255,191,0,0.8)]">
                 The floor is yours. Make a claim {gameState.pile.length > 0 && 'or challenge the lie'}.
@@ -367,14 +395,14 @@ export default function App() {
       {/* Player Hand (Anchored Bottom) */}
       <div className="fixed bottom-0 left-0 right-0 z-30 pointer-events-none">
           {/* Subtle gradient behind hand for contrast */}
-          <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-obsidian via-obsidian/80 to-transparent pointer-events-none"></div>
+          <div className="absolute bottom-0 left-0 right-0 h-56 bg-gradient-to-t from-obsidian via-obsidian/90 to-transparent pointer-events-none"></div>
 
           <div className="w-full flex justify-center pb-4 sm:pb-8 pt-10 pointer-events-auto">
             {me?.hand.map((color, idx) => {
               // Calculate fan effect
               const offsetFromCenter = idx - (me.hand.length - 1) / 2;
-              const rotation = offsetFromCenter * 5; // 5 degrees per card
-              const translateY = Math.abs(offsetFromCenter) * 8; // pushes outer cards down
+              const rotation = offsetFromCenter * 6; // slightly more fan
+              const translateY = Math.abs(offsetFromCenter) * 12; // slightly more arc
 
               return (
               <button
@@ -408,19 +436,22 @@ export default function App() {
             )})}
           </div>
 
-          {/* Player stats docked to corner */}
-          <div className="absolute bottom-6 left-6 glass-panel px-6 py-3 rounded-2xl flex items-center gap-4 pointer-events-auto shadow-2xl border-gold/40 bg-obsidian/80">
-                <div className="w-12 h-12 rounded-full bg-deep-purple border-2 border-gold flex items-center justify-center shadow-inner">
-                    <span className="text-lg font-bold text-gold">{me?.name.substring(0, 2).toUpperCase()}</span>
+          {/* Player stats docked to bottom center/left */}
+          <div className="absolute bottom-8 left-1/2 -translate-x-[250px] glass-panel px-6 py-3 rounded-full flex items-center gap-4 pointer-events-auto shadow-[0_0_20px_rgba(0,0,0,0.5)] border-gold/40 bg-obsidian/90 z-40">
+                <div className="w-10 h-10 rounded-full bg-deep-purple border-2 border-gold flex items-center justify-center shadow-inner">
+                    <span className="text-sm font-bold text-gold">{me?.name.substring(0, 2).toUpperCase()}</span>
                 </div>
-                <div>
-                   <div className="font-serif font-bold text-white text-lg">{me?.name}</div>
-                   <div className="flex gap-2 mt-1">
+                <div className="flex flex-col justify-center">
+                   <div className="font-serif font-bold text-white text-base leading-none">{me?.name}</div>
+                   <div className="flex gap-1.5 mt-2">
                       {[...Array(3)].map((_, i) => (
-                         <div key={i} className={`w-3 h-3 rounded-full border ${i < me?.penaltyPoints ? 'bg-red-500 border-red-400 shadow-[0_0_8px_rgba(239,68,68,0.8)]' : 'bg-transparent border-gold/30'}`} />
+                         <div key={i} className={`w-2.5 h-2.5 rounded-full border ${i < me?.penaltyPoints ? 'bg-red-500 border-red-400 shadow-[0_0_8px_rgba(239,68,68,0.8)]' : 'bg-transparent border-gold/30'}`} />
                       ))}
                    </div>
                 </div>
+                {me?.id === gameState.players[gameState.currentTurnIndex]?.id && (
+                    <div className="absolute -top-1 right-4 w-4 h-4 bg-amber rounded-full shadow-[0_0_10px_rgba(255,191,0,1)] animate-pulse"></div>
+                )}
           </div>
       </div>
 
