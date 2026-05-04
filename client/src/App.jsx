@@ -244,144 +244,191 @@ export default function App() {
     }
   }
 
+  const opponents = gameState.players.filter(p => p.id !== socket.id)
+
   return (
     <div className="min-h-screen text-primary flex flex-col relative overflow-hidden">
 
       {/* HUD Header */}
-      <header className="p-4 flex justify-between items-start z-20">
+      <header className="p-6 flex justify-between items-start z-20 absolute top-0 left-0 right-0">
         <div className="glass-panel px-4 py-2 rounded-xl text-center">
           <span className="text-[10px] text-gold/70 font-bold tracking-widest uppercase">Room</span>
           <div className="font-mono text-lg text-white">{gameState.id}</div>
         </div>
-
-        {/* Player Roster */}
-        <div className="flex flex-wrap gap-3 max-w-[60%] justify-end">
-          {gameState.players.map(p => (
-            <div key={p.id} className={`glass-panel flex flex-col items-center px-4 py-2 rounded-xl transition-all duration-300 ${p.id === gameState.players[gameState.currentTurnIndex]?.id ? 'border-gold shadow-[0_0_15px_rgba(212,175,55,0.3)] bg-deep-purple/40 scale-105' : 'border-deep-purple/50 opacity-80'}`}>
-              <span className="text-sm font-medium text-white truncate max-w-[100px]">{p.name}</span>
-              <div className="flex gap-1.5 mt-2">
-                {[...Array(3)].map((_, i) => (
-                  <div key={i} className={`w-2 h-2 rounded-full border ${i < p.penaltyPoints ? 'bg-red-500 border-red-400 shadow-[0_0_5px_rgba(239,68,68,0.8)]' : 'bg-transparent border-gold/30'}`} />
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
       </header>
 
-      {/* Main Play Area */}
-      <main className="flex-1 flex flex-col items-center justify-center p-4 relative z-10 mt-10">
+      {/* Opponents Area (Top) */}
+      <div className="w-full flex justify-center gap-6 mt-6 z-10 relative">
+        {opponents.map(p => (
+            <div key={p.id} className={`glass-panel flex flex-col items-center px-6 py-3 rounded-2xl transition-all duration-300 w-32 ${p.id === gameState.players[gameState.currentTurnIndex]?.id ? 'border-gold shadow-[0_0_20px_rgba(212,175,55,0.4)] bg-deep-purple/40 scale-105' : 'border-deep-purple/50 opacity-80'}`}>
+                <div className="w-10 h-10 rounded-full bg-obsidian border-2 border-gold/50 flex items-center justify-center mb-2 shadow-inner">
+                    <span className="text-xs font-bold text-gold">{p.name.substring(0, 2).toUpperCase()}</span>
+                </div>
+                <span className="text-sm font-medium text-white truncate max-w-full mb-2">{p.name}</span>
+                <div className="flex gap-1.5 mt-auto">
+                {[...Array(3)].map((_, i) => (
+                    <div key={i} className={`w-2.5 h-2.5 rounded-full border ${i < p.penaltyPoints ? 'bg-red-500 border-red-400 shadow-[0_0_5px_rgba(239,68,68,0.8)]' : 'bg-transparent border-gold/30'}`} />
+                ))}
+                </div>
+                {p.id === gameState.players[gameState.currentTurnIndex]?.id && (
+                   <div className="absolute -bottom-2 w-12 h-1 bg-gold rounded-full shadow-[0_0_10px_rgba(212,175,55,1)]"></div>
+                )}
+            </div>
+        ))}
+      </div>
 
-        {/* Active Color Indicator */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none z-0">
-          <div className="absolute w-32 h-32 rounded-full bg-deep-purple/20 blur-xl top-4"></div>
-          <span className="text-xs text-gold/70 font-bold uppercase tracking-widest mb-3 drop-shadow-md">Active Element</span>
-          <div className={`w-20 h-20 rounded-2xl border-2 flex items-center justify-center relative z-10 ${getColorClasses(gameState.activeColor)}`}>
-            {gameState.activeColor === 'sun' && <span className="text-4xl">☀️</span>}
-            {gameState.activeColor === 'leaf' && <span className="text-4xl">🍃</span>}
-            {gameState.activeColor === 'water' && <span className="text-4xl">💧</span>}
-          </div>
+      {/* Main Play Area (Center) */}
+      <main className="flex-1 flex flex-col items-center justify-center relative z-10 mt-12 mb-32">
+
+        {/* Play Table Surface */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div className="w-[600px] h-[600px] rounded-full bg-deep-purple/5 border border-gold/5 shadow-[inset_0_0_100px_rgba(15,10,26,1)] flex items-center justify-center">
+                 <div className="w-[400px] h-[400px] rounded-full border border-gold/10"></div>
+            </div>
         </div>
 
-        {/* Center Pile */}
-        <div className="relative w-48 h-64 mb-16 mt-20">
-          {gameState.pile.length === 0 ? (
-            <div className="w-full h-full border-2 border-dashed border-gold/20 rounded-2xl flex items-center justify-center text-gold/40 font-serif italic text-lg bg-obsidian/30 backdrop-blur-sm">
-              Place your truth...
-            </div>
-          ) : (
-            <div className="relative w-full h-full">
-              {gameState.pile.map((card, idx) => (
-                <div
-                  key={idx}
-                  className="absolute inset-0 bg-[#2D1B4D] border-2 border-gold/40 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center transition-transform"
-                  style={{
-                    transform: `rotate(${(idx * 5) % 15 - 7}deg) translateY(${idx * -2}px)`,
-                    zIndex: idx
-                  }}
-                >
-                  <div className="w-[85%] h-[85%] border border-gold/20 rounded-xl bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+CjxwYXRoIGQ9Ik0wLDBMMjAsMjBMMTAsMjBMMSwwWiIgZmlsbD0icmdiYSgyMTIsIDE3NSwgNTUsIDAuMDUpIi8+Cjwvc3ZnPg==')] flex items-center justify-center opacity-80">
-                     <div className="w-12 h-12 rounded-full border-2 border-gold/30 flex items-center justify-center">
-                        <span className="text-gold/50 font-serif text-3xl">?</span>
-                     </div>
-                  </div>
+        <div className="flex flex-col md:flex-row items-center justify-center gap-12 md:gap-24">
+
+            {/* Active Element Box */}
+            <div className="flex flex-col items-center relative z-10 glass-panel p-6 rounded-3xl">
+                <div className="absolute inset-0 rounded-3xl bg-deep-purple/10 blur-xl"></div>
+                <span className="text-xs text-gold/70 font-bold uppercase tracking-widest mb-4 drop-shadow-md relative z-10">Active Element</span>
+                <div className={`w-24 h-24 rounded-2xl border-4 flex items-center justify-center relative z-10 shadow-2xl ${getColorClasses(gameState.activeColor)}`}>
+                    {gameState.activeColor === 'sun' && <span className="text-5xl">☀️</span>}
+                    {gameState.activeColor === 'leaf' && <span className="text-5xl">🍃</span>}
+                    {gameState.activeColor === 'water' && <span className="text-5xl">💧</span>}
                 </div>
-              ))}
-
-              {/* Challenge Button Overlay */}
-              {canChallenge && (
-                <button
-                  onClick={handleChallenge}
-                  className="absolute -right-20 top-1/2 -translate-y-1/2 bg-gradient-to-r from-red-600 to-red-800 border-2 border-red-400 text-white font-bold py-3 px-6 rounded-full shadow-[0_0_20px_rgba(220,38,38,0.6)] transform transition hover:scale-105 active:scale-95 animate-bounce z-50 uppercase tracking-wider text-sm"
-                >
-                  Challenge!
-                </button>
-              )}
             </div>
-          )}
 
-          {/* Last Move Info */}
-          {gameState.lastMove && gameState.pile.length > 0 && (
-             <div className="absolute -bottom-16 left-1/2 -translate-x-1/2 whitespace-nowrap glass-panel px-5 py-3 rounded-full text-sm flex items-center gap-3">
-                 <span className="text-primary/70">Last claim:</span>
-                 <span className="font-bold text-white">{gameState.players.find(p=>p.id === gameState.lastMove.playerId)?.name}</span>
-                 <span className="text-primary/70">declared</span>
-                 <span className={`w-4 h-4 rounded-full border border-white/50 ${getColorClasses(gameState.lastMove.colorDeclared).split(' ')[0]}`}></span>
-             </div>
-          )}
+            {/* Center Pile */}
+            <div className="relative w-48 h-64 flex flex-col items-center">
+            {gameState.pile.length === 0 ? (
+                <div className="w-full h-full border-2 border-dashed border-gold/20 rounded-2xl flex items-center justify-center text-gold/40 font-serif italic text-lg bg-obsidian/30 backdrop-blur-sm shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]">
+                Place your truth...
+                </div>
+            ) : (
+                <div className="relative w-full h-full flex justify-center">
+                {gameState.pile.map((card, idx) => (
+                    <div
+                    key={idx}
+                    className="absolute inset-0 bg-[#2D1B4D] border-2 border-gold/40 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center transition-transform mx-auto"
+                    style={{
+                        transform: `rotate(${(idx * 5) % 15 - 7}deg) translateY(${idx * -2}px)`,
+                        zIndex: idx
+                    }}
+                    >
+                    <div className="w-[85%] h-[85%] border border-gold/20 rounded-xl bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+CjxwYXRoIGQ9Ik0wLDBMMjAsMjBMMTAsMjBMMSwwWiIgZmlsbD0icmdiYSgyMTIsIDE3NSwgNTUsIDAuMDUpIi8+Cjwvc3ZnPg==')] flex items-center justify-center opacity-80">
+                        <div className="w-12 h-12 rounded-full border-2 border-gold/30 flex items-center justify-center">
+                            <span className="text-gold/50 font-serif text-3xl">?</span>
+                        </div>
+                    </div>
+                    </div>
+                ))}
+
+                {/* Challenge Button Overlay */}
+                {canChallenge && (
+                    <button
+                    onClick={handleChallenge}
+                    className="absolute -right-6 top-[80%] bg-gradient-to-r from-red-600 to-red-800 border-2 border-red-400 text-white font-bold py-3 px-6 rounded-full shadow-[0_0_20px_rgba(220,38,38,0.6)] transform transition hover:scale-105 active:scale-95 animate-bounce z-50 uppercase tracking-wider text-sm whitespace-nowrap"
+                    >
+                    Challenge!
+                    </button>
+                )}
+                </div>
+            )}
+
+            {/* Last Move Info */}
+            {gameState.lastMove && gameState.pile.length > 0 && (
+                <div className="absolute -bottom-20 left-1/2 -translate-x-1/2 whitespace-nowrap glass-panel px-5 py-3 rounded-full text-sm flex items-center gap-3 shadow-lg w-max z-20">
+                    <span className="text-primary/70">Last claim:</span>
+                    <span className="font-bold text-white">{gameState.players.find(p=>p.id === gameState.lastMove.playerId)?.name}</span>
+                    <span className="text-primary/70">declared</span>
+                    <span className={`w-4 h-4 rounded-full border border-white/50 ${getColorClasses(gameState.lastMove.colorDeclared).split(' ')[0]}`}></span>
+                </div>
+            )}
+            </div>
+
         </div>
 
         {/* Status Message */}
-        <div className="h-10 mb-8 text-center flex items-center justify-center">
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 h-10 text-center flex items-center justify-center z-20 whitespace-nowrap w-full">
           {isMyTurn ? (
-             <span className="text-amber font-serif italic text-xl drop-shadow-[0_0_8px_rgba(255,191,0,0.5)]">
+             <span className="text-amber font-serif italic text-2xl drop-shadow-[0_0_10px_rgba(255,191,0,0.8)]">
                 The floor is yours. Make a claim {gameState.pile.length > 0 && 'or challenge the lie'}.
              </span>
           ) : (
-             <span className="text-primary/60 font-serif italic text-lg">
+             <span className="text-primary/60 font-serif italic text-xl">
                 Waiting for {gameState.players[gameState.currentTurnIndex]?.name} to act...
              </span>
           )}
         </div>
+      </main>
 
-        {/* Player Hand */}
-        <div className="w-full max-w-4xl px-4">
-          <div className="flex justify-center gap-2 sm:gap-4 flex-wrap">
-            {me?.hand.map((color, idx) => (
+      {/* Player Hand (Anchored Bottom) */}
+      <div className="fixed bottom-0 left-0 right-0 z-30 pointer-events-none">
+          {/* Subtle gradient behind hand for contrast */}
+          <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-obsidian via-obsidian/80 to-transparent pointer-events-none"></div>
+
+          <div className="w-full flex justify-center pb-4 sm:pb-8 pt-10 pointer-events-auto">
+            {me?.hand.map((color, idx) => {
+              // Calculate fan effect
+              const offsetFromCenter = idx - (me.hand.length - 1) / 2;
+              const rotation = offsetFromCenter * 5; // 5 degrees per card
+              const translateY = Math.abs(offsetFromCenter) * 8; // pushes outer cards down
+
+              return (
               <button
                 key={idx}
                 onClick={() => handlePlayCard(idx)}
                 disabled={!isMyTurn}
-                className={`group relative w-20 h-28 sm:w-28 sm:h-40 rounded-2xl border-2 transition-all duration-300 transform-gpu
+                className={`group relative w-24 h-36 sm:w-32 sm:h-48 rounded-2xl border-2 transition-all duration-300 transform-gpu
                   ${getColorClasses(color)}
-                  ${isMyTurn ? 'hover:-translate-y-6 hover:shadow-[0_15px_30px_rgba(0,0,0,0.5)] cursor-pointer hover:z-10' : 'opacity-70 cursor-not-allowed scale-95 saturate-50'}
+                  ${isMyTurn ? 'hover:-translate-y-12 hover:shadow-[0_20px_40px_rgba(0,0,0,0.8)] hover:z-50 cursor-pointer' : 'opacity-70 cursor-not-allowed saturate-50'}
                 `}
+                style={{
+                   transform: `rotate(${rotation}deg) translateY(${translateY}px)`,
+                   zIndex: 10 + idx,
+                   marginLeft: idx === 0 ? '0' : '-1.5rem', // overlap cards
+                }}
               >
                 <div className="absolute inset-1.5 rounded-xl border border-white/30 bg-black/20 flex flex-col items-center justify-center">
-                   <div className="text-3xl sm:text-5xl drop-shadow-md mb-2">
+                   <div className="text-4xl sm:text-6xl drop-shadow-md mb-2">
                      {color === 'sun' && '☀️'}
                      {color === 'leaf' && '🍃'}
                      {color === 'water' && '💧'}
                    </div>
-                   <div className="absolute top-2 left-2 text-[10px] font-bold opacity-70">
+                   <div className="absolute top-3 left-3 text-xs sm:text-sm font-bold opacity-80 text-white drop-shadow">
                        {color.substring(0,1).toUpperCase()}
                    </div>
-                   <div className="absolute bottom-2 right-2 text-[10px] font-bold opacity-70 rotate-180">
+                   <div className="absolute bottom-3 right-3 text-xs sm:text-sm font-bold opacity-80 rotate-180 text-white drop-shadow">
                        {color.substring(0,1).toUpperCase()}
                    </div>
                 </div>
               </button>
-            ))}
+            )})}
           </div>
-        </div>
 
-      </main>
+          {/* Player stats docked to corner */}
+          <div className="absolute bottom-6 left-6 glass-panel px-6 py-3 rounded-2xl flex items-center gap-4 pointer-events-auto shadow-2xl border-gold/40 bg-obsidian/80">
+                <div className="w-12 h-12 rounded-full bg-deep-purple border-2 border-gold flex items-center justify-center shadow-inner">
+                    <span className="text-lg font-bold text-gold">{me?.name.substring(0, 2).toUpperCase()}</span>
+                </div>
+                <div>
+                   <div className="font-serif font-bold text-white text-lg">{me?.name}</div>
+                   <div className="flex gap-2 mt-1">
+                      {[...Array(3)].map((_, i) => (
+                         <div key={i} className={`w-3 h-3 rounded-full border ${i < me?.penaltyPoints ? 'bg-red-500 border-red-400 shadow-[0_0_8px_rgba(239,68,68,0.8)]' : 'bg-transparent border-gold/30'}`} />
+                      ))}
+                   </div>
+                </div>
+          </div>
+      </div>
 
       {/* Overlays */}
 
       {/* Challenge Result Modal */}
       {challengeResult && (
-        <div className="fixed inset-0 bg-obsidian/90 backdrop-blur-md flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-obsidian/90 backdrop-blur-md flex items-center justify-center z-[60] p-4">
           <div className="glass-panel p-10 rounded-2xl max-w-lg w-full text-center transform animate-in zoom-in duration-300">
              <h2 className="font-serif text-4xl font-bold mb-8 text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">Challenge Revealed!</h2>
 
@@ -425,7 +472,7 @@ export default function App() {
 
       {/* Punishment Phase Modal */}
       {isPunishmentPhase && !challengeResult && (
-        <div className="fixed inset-0 bg-obsidian/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-obsidian/80 backdrop-blur-md flex items-center justify-center z-[60] p-4">
           <div className="text-center max-w-3xl w-full">
             <h2 className="font-serif text-5xl font-bold text-red-500 mb-4 drop-shadow-[0_0_15px_rgba(239,68,68,0.4)]">Judgment Phase</h2>
             <p className="text-2xl text-primary mb-16 font-serif italic">
@@ -454,7 +501,7 @@ export default function App() {
 
       {/* Punishment Result overlay */}
       {punishmentResult && (
-         <div className="fixed inset-0 flex items-center justify-center z-[60] pointer-events-none bg-obsidian/50 backdrop-blur-sm">
+         <div className="fixed inset-0 flex items-center justify-center z-[70] pointer-events-none bg-obsidian/50 backdrop-blur-sm">
              <div className="glass-panel p-12 rounded-3xl shadow-[0_0_50px_rgba(0,0,0,0.8)] text-center transform animate-in zoom-in duration-300 border-2">
                  <div className={`text-8xl mb-6 drop-shadow-2xl ${punishmentResult.drawnCard === 'penalty' ? 'text-red-500' : 'text-green-500'}`}>
                      {punishmentResult.drawnCard === 'penalty' ? '☠️' : '🛡️'}
