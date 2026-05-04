@@ -76,50 +76,64 @@ export default function App() {
   // Views
   if (!gameState) {
     return (
-      <div className="min-h-screen bg-neutral-900 text-white flex items-center justify-center p-4">
-        <div className="bg-neutral-800 p-8 rounded-2xl shadow-xl max-w-md w-full border border-neutral-700">
-          <h1 className="text-4xl font-bold text-center mb-8 text-amber-500 tracking-tight">BLUFF</h1>
+      <div className="min-h-screen text-primary flex flex-col items-center justify-center p-4 relative overflow-hidden font-sans">
+
+        {/* Floating background decorative cards */}
+        <div className="absolute top-20 left-20 w-32 h-48 border border-gold/20 rounded-xl bg-deep-purple/20 backdrop-blur-sm -rotate-12 animate-float opacity-50" style={{ animationDelay: '0s' }}></div>
+        <div className="absolute bottom-20 right-20 w-32 h-48 border border-gold/20 rounded-xl bg-deep-purple/20 backdrop-blur-sm rotate-12 animate-float opacity-50" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-40 right-40 w-24 h-36 border border-gold/20 rounded-xl bg-deep-purple/20 backdrop-blur-sm rotate-6 animate-float opacity-30" style={{ animationDelay: '2s' }}></div>
+
+
+        <div className="glass-panel p-10 rounded-2xl max-w-md w-full text-center relative z-10 animate-in zoom-in">
+          <h1 className="font-serif text-5xl font-bold mb-2 text-gold drop-shadow-[0_0_10px_rgba(212,175,55,0.5)]">Arcane Parlor</h1>
+          <p className="text-primary/70 mb-8 font-sans text-sm tracking-widest uppercase">A game of hidden truths</p>
 
           {error && (
-            <div className="bg-red-500/20 text-red-400 p-3 rounded-lg flex items-center gap-2 mb-6 text-sm">
+            <div className="bg-red-900/40 text-red-300 p-3 rounded-lg flex items-center justify-center gap-2 mb-6 text-sm border border-red-900/50">
               <AlertCircle size={16} /> {error}
             </div>
           )}
 
-          <div className="space-y-6">
+          <div className="space-y-8 text-left">
             <div>
-              <label className="block text-sm font-medium text-neutral-400 mb-2">Your Name</label>
+              <label className="block text-xs font-bold text-gold/70 uppercase tracking-widest mb-2">Alias</label>
               <input
                 type="text"
                 value={playerName}
                 onChange={(e) => setPlayerName(e.target.value)}
-                className="w-full bg-neutral-950 border border-neutral-700 rounded-lg px-4 py-3 focus:outline-none focus:border-amber-500 transition-colors"
-                placeholder="Enter your alias"
+                className="w-full glass-input text-white rounded-t-lg px-4 py-3 focus:outline-none"
+                placeholder="Enter your name"
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4 pt-4 border-t border-neutral-700">
+            <div className="pt-6 border-t border-deep-purple/50">
               <button
                 onClick={handleCreateRoom}
-                className="flex items-center justify-center gap-2 bg-amber-600 hover:bg-amber-500 text-white font-medium py-3 px-4 rounded-lg transition-colors"
+                className="w-full btn-magic py-4 rounded-lg flex items-center justify-center gap-2 text-lg mb-6 hover:animate-pulse-glow"
               >
-                <PlusCircle size={20} /> Create
+                <PlusCircle size={22} /> Create New Room
               </button>
 
-              <div className="flex flex-col gap-2">
+              <div className="relative flex items-center gap-4">
+                <div className="flex-1 border-t border-deep-purple/50"></div>
+                <span className="text-gold/50 text-xs uppercase font-bold tracking-widest">OR</span>
+                <div className="flex-1 border-t border-deep-purple/50"></div>
+              </div>
+
+              <div className="mt-6 flex flex-col gap-3">
                 <input
                   type="text"
                   value={joinRoomId}
                   onChange={(e) => setJoinRoomId(e.target.value)}
-                  className="w-full bg-neutral-950 border border-neutral-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-amber-500 text-center uppercase"
-                  placeholder="ROOM ID"
+                  className="w-full glass-input text-white rounded-t-lg px-4 py-3 text-center uppercase tracking-widest focus:outline-none"
+                  placeholder="ROOM CODE"
                   maxLength={6}
                 />
                 <button
                   onClick={handleJoinRoom}
-                  className="flex items-center justify-center gap-2 bg-neutral-700 hover:bg-neutral-600 text-white font-medium py-2 px-4 rounded-lg transition-colors"
+                  className="w-full btn-ghost py-3 rounded-lg flex items-center justify-center gap-2 font-medium"
                 >
-                  <LogIn size={20} /> Join
+                  <LogIn size={20} /> Join Room
                 </button>
               </div>
             </div>
@@ -137,21 +151,26 @@ export default function App() {
 
   if (gameState.status === 'waiting') {
     return (
-      <div className="min-h-screen bg-neutral-900 text-white flex items-center justify-center p-4">
-        <div className="bg-neutral-800 p-8 rounded-2xl shadow-xl max-w-md w-full border border-neutral-700 text-center">
-          <h2 className="text-2xl font-bold mb-2">Room Code: <span className="text-amber-500 tracking-widest">{gameState.id}</span></h2>
-          <p className="text-neutral-400 mb-8">Share this code with your friends</p>
+      <div className="min-h-screen text-primary flex items-center justify-center p-4">
+        <div className="glass-panel p-10 rounded-2xl max-w-md w-full text-center">
+          <h2 className="font-serif text-3xl font-bold mb-2 text-gold">The Parlor</h2>
+          <div className="my-6 bg-obsidian/60 border border-gold/30 rounded-xl p-6 shadow-inner">
+             <p className="text-sm text-gold/70 uppercase tracking-widest mb-2 font-bold">Invitation Code</p>
+             <h3 className="font-mono text-4xl tracking-widest text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]">{gameState.id}</h3>
+          </div>
 
-          <div className="bg-neutral-950 rounded-xl p-4 mb-8">
-            <h3 className="flex items-center justify-center gap-2 text-sm font-medium text-neutral-500 mb-4 uppercase tracking-wider">
-              <Users size={16} /> Players ({gameState.players.length}/8)
+          <div className="mb-8 text-left">
+            <h3 className="flex items-center gap-2 text-xs font-bold text-gold/70 uppercase tracking-widest mb-4 border-b border-deep-purple/50 pb-2">
+              <Users size={16} /> Guests ({gameState.players.length}/8)
             </h3>
-            <ul className="space-y-2">
+            <ul className="space-y-3">
               {gameState.players.map(p => (
-                <li key={p.id} className="flex items-center justify-between bg-neutral-800 p-3 rounded-lg">
-                  <span>{p.name}</span>
-                  {p.id === socket.id && <span className="text-xs bg-amber-500/20 text-amber-500 px-2 py-1 rounded">You</span>}
-                  {p.isHost && <span className="text-xs bg-neutral-700 text-neutral-300 px-2 py-1 rounded">Host</span>}
+                <li key={p.id} className="flex items-center justify-between bg-deep-purple/30 border border-deep-purple/50 p-3 rounded-lg">
+                  <span className="font-medium text-white">{p.name}</span>
+                  <div className="flex gap-2">
+                     {p.id === socket.id && <span className="text-xs bg-amber/20 text-amber border border-amber/30 px-2 py-1 rounded">You</span>}
+                     {p.isHost && <span className="text-xs bg-gold/20 text-gold border border-gold/30 px-2 py-1 rounded">Host</span>}
+                  </div>
                 </li>
               ))}
             </ul>
@@ -161,12 +180,12 @@ export default function App() {
             <button
               onClick={handleStartGame}
               disabled={gameState.players.length < 2}
-              className="w-full flex items-center justify-center gap-2 bg-amber-600 hover:bg-amber-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium py-3 px-4 rounded-lg transition-colors"
+              className="w-full btn-magic py-4 rounded-lg flex items-center justify-center gap-2 text-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none"
             >
-              <Play size={20} /> Start Game
+              <Play size={20} /> Begin Game
             </button>
           ) : (
-            <p className="text-neutral-500 animate-pulse">Waiting for host to start...</p>
+            <p className="text-gold/50 animate-pulse font-serif italic text-lg">Waiting for host to break the seal...</p>
           )}
         </div>
       </div>
@@ -178,21 +197,26 @@ export default function App() {
     const losingPlayer = gameState.players.find(p => !gameState.winner.includes(p.id))
 
     return (
-      <div className="min-h-screen bg-neutral-900 text-white flex items-center justify-center p-4">
-        <div className="bg-neutral-800 p-8 rounded-2xl shadow-xl max-w-md w-full border border-neutral-700 text-center">
-          <h2 className={`text-4xl font-bold mb-4 ${isWinner ? 'text-green-500' : 'text-red-500'}`}>
-            {isWinner ? 'Victory!' : 'Defeat!'}
+      <div className="min-h-screen text-primary flex items-center justify-center p-4">
+        <div className="glass-panel p-10 rounded-2xl max-w-md w-full text-center relative overflow-hidden">
+          {/* Decorative background glow */}
+          <div className={`absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 rounded-full blur-3xl opacity-20 ${isWinner ? 'bg-green-500' : 'bg-red-500'}`}></div>
+
+          <h2 className={`font-serif text-5xl font-bold mb-4 relative z-10 drop-shadow-[0_0_10px_currentColor] ${isWinner ? 'text-amber' : 'text-red-500'}`}>
+            {isWinner ? 'Victory' : 'Defeat'}
           </h2>
-          <p className="text-lg text-neutral-300 mb-8">
-            {losingPlayer?.name} hit 3 penalty points and lost the game.
+          <p className="text-lg text-primary/80 mb-8 relative z-10 font-serif italic">
+            {losingPlayer?.name} has succumbed to the abyss.
           </p>
 
-          <div className="space-y-2 mb-8 text-left bg-neutral-950 p-4 rounded-xl">
-             <h3 className="text-sm text-neutral-500 font-bold uppercase mb-2">Final Scores</h3>
+          <div className="space-y-2 mb-8 text-left bg-obsidian/60 border border-deep-purple/50 p-6 rounded-xl relative z-10">
+             <h3 className="text-xs text-gold/70 font-bold uppercase mb-4 tracking-widest border-b border-deep-purple/50 pb-2">Final Tally</h3>
              {gameState.players.map(p => (
-                 <div key={p.id} className="flex justify-between items-center">
-                     <span>{p.name}</span>
-                     <span className="text-red-400">{p.penaltyPoints} points</span>
+                 <div key={p.id} className="flex justify-between items-center py-1">
+                     <span className="text-white">{p.name}</span>
+                     <span className={`font-mono ${p.penaltyPoints >= 3 ? 'text-red-400 font-bold' : 'text-primary/70'}`}>
+                        {p.penaltyPoints} / 3 points
+                     </span>
                  </div>
              ))}
           </div>
@@ -200,7 +224,7 @@ export default function App() {
           {me?.isHost && (
               <button
                 onClick={handleRestartGame}
-                className="w-full flex items-center justify-center gap-2 bg-amber-600 hover:bg-amber-500 text-white font-medium py-3 px-4 rounded-lg transition-colors"
+                className="w-full btn-magic py-4 rounded-lg flex items-center justify-center gap-2 text-lg relative z-10"
               >
                 <RefreshCw size={20} /> Play Again
               </button>
@@ -210,32 +234,34 @@ export default function App() {
     )
   }
 
-  // COLOR THEMES
+  // COLOR THEMES for magical elements
   const getColorClasses = (color) => {
     switch (color) {
-      case 'sun': return 'bg-yellow-500 border-yellow-600 shadow-yellow-500/20'
-      case 'leaf': return 'bg-green-500 border-green-600 shadow-green-500/20'
-      case 'water': return 'bg-blue-500 border-blue-600 shadow-blue-500/20'
+      case 'sun': return 'bg-gradient-to-br from-yellow-400 to-amber-600 border-yellow-300 shadow-[0_0_15px_rgba(251,191,36,0.5)] text-yellow-900'
+      case 'leaf': return 'bg-gradient-to-br from-green-400 to-emerald-700 border-green-300 shadow-[0_0_15px_rgba(52,211,153,0.5)] text-green-900'
+      case 'water': return 'bg-gradient-to-br from-blue-400 to-indigo-700 border-blue-300 shadow-[0_0_15px_rgba(96,165,250,0.5)] text-blue-900'
       default: return 'bg-neutral-700 border-neutral-600'
     }
   }
 
   return (
-    <div className="min-h-screen bg-neutral-900 text-white flex flex-col font-sans relative overflow-hidden">
+    <div className="min-h-screen text-primary flex flex-col relative overflow-hidden">
 
       {/* HUD Header */}
-      <header className="p-4 flex justify-between items-center border-b border-neutral-800 bg-neutral-950/50 backdrop-blur">
-        <div>
-          <span className="text-xs text-neutral-500 font-bold tracking-widest uppercase">Room</span>
-          <div className="font-mono text-lg">{gameState.id}</div>
+      <header className="p-4 flex justify-between items-start z-20">
+        <div className="glass-panel px-4 py-2 rounded-xl text-center">
+          <span className="text-[10px] text-gold/70 font-bold tracking-widest uppercase">Room</span>
+          <div className="font-mono text-lg text-white">{gameState.id}</div>
         </div>
-        <div className="flex gap-4">
+
+        {/* Player Roster */}
+        <div className="flex flex-wrap gap-3 max-w-[60%] justify-end">
           {gameState.players.map(p => (
-            <div key={p.id} className={`flex flex-col items-center p-2 rounded-lg border ${p.id === gameState.players[gameState.currentTurnIndex]?.id ? 'border-amber-500 bg-amber-500/10' : 'border-transparent'}`}>
-              <span className="text-sm truncate max-w-[80px]">{p.name}</span>
-              <div className="flex gap-1 mt-1">
+            <div key={p.id} className={`glass-panel flex flex-col items-center px-4 py-2 rounded-xl transition-all duration-300 ${p.id === gameState.players[gameState.currentTurnIndex]?.id ? 'border-gold shadow-[0_0_15px_rgba(212,175,55,0.3)] bg-deep-purple/40 scale-105' : 'border-deep-purple/50 opacity-80'}`}>
+              <span className="text-sm font-medium text-white truncate max-w-[100px]">{p.name}</span>
+              <div className="flex gap-1.5 mt-2">
                 {[...Array(3)].map((_, i) => (
-                  <div key={i} className={`w-2 h-2 rounded-full ${i < p.penaltyPoints ? 'bg-red-500' : 'bg-neutral-700'}`} />
+                  <div key={i} className={`w-2 h-2 rounded-full border ${i < p.penaltyPoints ? 'bg-red-500 border-red-400 shadow-[0_0_5px_rgba(239,68,68,0.8)]' : 'bg-transparent border-gold/30'}`} />
                 ))}
               </div>
             </div>
@@ -244,37 +270,40 @@ export default function App() {
       </header>
 
       {/* Main Play Area */}
-      <main className="flex-1 flex flex-col items-center justify-center p-4 relative z-10">
+      <main className="flex-1 flex flex-col items-center justify-center p-4 relative z-10 mt-10">
 
         {/* Active Color Indicator */}
-        <div className="absolute top-8 left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none">
-          <span className="text-xs text-neutral-500 font-bold uppercase tracking-widest mb-2">Active Color</span>
-          <div className={`w-16 h-16 rounded-2xl border-4 flex items-center justify-center shadow-2xl ${getColorClasses(gameState.activeColor)}`}>
-            {gameState.activeColor === 'sun' && '☀️'}
-            {gameState.activeColor === 'leaf' && '🍃'}
-            {gameState.activeColor === 'water' && '💧'}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none z-0">
+          <div className="absolute w-32 h-32 rounded-full bg-deep-purple/20 blur-xl top-4"></div>
+          <span className="text-xs text-gold/70 font-bold uppercase tracking-widest mb-3 drop-shadow-md">Active Element</span>
+          <div className={`w-20 h-20 rounded-2xl border-2 flex items-center justify-center relative z-10 ${getColorClasses(gameState.activeColor)}`}>
+            {gameState.activeColor === 'sun' && <span className="text-4xl">☀️</span>}
+            {gameState.activeColor === 'leaf' && <span className="text-4xl">🍃</span>}
+            {gameState.activeColor === 'water' && <span className="text-4xl">💧</span>}
           </div>
         </div>
 
         {/* Center Pile */}
-        <div className="relative w-48 h-64 mb-12">
+        <div className="relative w-48 h-64 mb-16 mt-20">
           {gameState.pile.length === 0 ? (
-            <div className="w-full h-full border-2 border-dashed border-neutral-700 rounded-xl flex items-center justify-center text-neutral-600 font-medium">
-              Empty Pile
+            <div className="w-full h-full border-2 border-dashed border-gold/20 rounded-2xl flex items-center justify-center text-gold/40 font-serif italic text-lg bg-obsidian/30 backdrop-blur-sm">
+              Place your truth...
             </div>
           ) : (
             <div className="relative w-full h-full">
               {gameState.pile.map((card, idx) => (
                 <div
                   key={idx}
-                  className="absolute inset-0 bg-neutral-200 border-2 border-white rounded-xl shadow-xl flex items-center justify-center transition-transform"
+                  className="absolute inset-0 bg-[#2D1B4D] border-2 border-gold/40 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center transition-transform"
                   style={{
                     transform: `rotate(${(idx * 5) % 15 - 7}deg) translateY(${idx * -2}px)`,
                     zIndex: idx
                   }}
                 >
-                  <div className="w-4/5 h-4/5 border border-neutral-300 rounded-lg bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-neutral-100 to-neutral-300 flex items-center justify-center">
-                    <span className="text-neutral-400 opacity-50 text-4xl">?</span>
+                  <div className="w-[85%] h-[85%] border border-gold/20 rounded-xl bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+CjxwYXRoIGQ9Ik0wLDBMMjAsMjBMMTAsMjBMMSwwWiIgZmlsbD0icmdiYSgyMTIsIDE3NSwgNTUsIDAuMDUpIi8+Cjwvc3ZnPg==')] flex items-center justify-center opacity-80">
+                     <div className="w-12 h-12 rounded-full border-2 border-gold/30 flex items-center justify-center">
+                        <span className="text-gold/50 font-serif text-3xl">?</span>
+                     </div>
                   </div>
                 </div>
               ))}
@@ -283,7 +312,7 @@ export default function App() {
               {canChallenge && (
                 <button
                   onClick={handleChallenge}
-                  className="absolute -right-16 top-1/2 -translate-y-1/2 bg-red-600 hover:bg-red-500 text-white font-bold py-3 px-6 rounded-full shadow-lg shadow-red-500/30 transform transition hover:scale-105 active:scale-95 animate-bounce z-50"
+                  className="absolute -right-20 top-1/2 -translate-y-1/2 bg-gradient-to-r from-red-600 to-red-800 border-2 border-red-400 text-white font-bold py-3 px-6 rounded-full shadow-[0_0_20px_rgba(220,38,38,0.6)] transform transition hover:scale-105 active:scale-95 animate-bounce z-50 uppercase tracking-wider text-sm"
                 >
                   Challenge!
                 </button>
@@ -293,41 +322,53 @@ export default function App() {
 
           {/* Last Move Info */}
           {gameState.lastMove && gameState.pile.length > 0 && (
-             <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 whitespace-nowrap bg-neutral-800 px-4 py-2 rounded-full border border-neutral-700 text-sm flex items-center gap-2">
-                 <span className="text-neutral-400">Last play:</span>
-                 <span className="font-bold">{gameState.players.find(p=>p.id === gameState.lastMove.playerId)?.name}</span>
-                 <span className="text-neutral-500">declared</span>
-                 <span className={`w-3 h-3 rounded-full ${getColorClasses(gameState.lastMove.colorDeclared)}`}></span>
+             <div className="absolute -bottom-16 left-1/2 -translate-x-1/2 whitespace-nowrap glass-panel px-5 py-3 rounded-full text-sm flex items-center gap-3">
+                 <span className="text-primary/70">Last claim:</span>
+                 <span className="font-bold text-white">{gameState.players.find(p=>p.id === gameState.lastMove.playerId)?.name}</span>
+                 <span className="text-primary/70">declared</span>
+                 <span className={`w-4 h-4 rounded-full border border-white/50 ${getColorClasses(gameState.lastMove.colorDeclared).split(' ')[0]}`}></span>
              </div>
           )}
         </div>
 
         {/* Status Message */}
-        <div className="h-8 mb-8 text-center">
+        <div className="h-10 mb-8 text-center flex items-center justify-center">
           {isMyTurn ? (
-             <span className="text-amber-400 font-medium text-lg animate-pulse">It's your turn! Play a card {gameState.pile.length > 0 && 'or challenge'}.</span>
+             <span className="text-amber font-serif italic text-xl drop-shadow-[0_0_8px_rgba(255,191,0,0.5)]">
+                The floor is yours. Make a claim {gameState.pile.length > 0 && 'or challenge the lie'}.
+             </span>
           ) : (
-             <span className="text-neutral-500 font-medium text-lg">Waiting for {gameState.players[gameState.currentTurnIndex]?.name}'s move...</span>
+             <span className="text-primary/60 font-serif italic text-lg">
+                Waiting for {gameState.players[gameState.currentTurnIndex]?.name} to act...
+             </span>
           )}
         </div>
 
         {/* Player Hand */}
-        <div className="w-full max-w-3xl">
+        <div className="w-full max-w-4xl px-4">
           <div className="flex justify-center gap-2 sm:gap-4 flex-wrap">
             {me?.hand.map((color, idx) => (
               <button
                 key={idx}
                 onClick={() => handlePlayCard(idx)}
                 disabled={!isMyTurn}
-                className={`group relative w-20 h-28 sm:w-24 sm:h-36 rounded-xl border-2 shadow-lg transition-all duration-200
+                className={`group relative w-20 h-28 sm:w-28 sm:h-40 rounded-2xl border-2 transition-all duration-300 transform-gpu
                   ${getColorClasses(color)}
-                  ${isMyTurn ? 'hover:-translate-y-4 hover:shadow-2xl cursor-pointer' : 'opacity-80 cursor-not-allowed'}
+                  ${isMyTurn ? 'hover:-translate-y-6 hover:shadow-[0_15px_30px_rgba(0,0,0,0.5)] cursor-pointer hover:z-10' : 'opacity-70 cursor-not-allowed scale-95 saturate-50'}
                 `}
               >
-                <div className="absolute inset-1 rounded-lg border border-white/20 bg-black/10 flex items-center justify-center text-3xl">
-                   {color === 'sun' && '☀️'}
-                   {color === 'leaf' && '🍃'}
-                   {color === 'water' && '💧'}
+                <div className="absolute inset-1.5 rounded-xl border border-white/30 bg-black/20 flex flex-col items-center justify-center">
+                   <div className="text-3xl sm:text-5xl drop-shadow-md mb-2">
+                     {color === 'sun' && '☀️'}
+                     {color === 'leaf' && '🍃'}
+                     {color === 'water' && '💧'}
+                   </div>
+                   <div className="absolute top-2 left-2 text-[10px] font-bold opacity-70">
+                       {color.substring(0,1).toUpperCase()}
+                   </div>
+                   <div className="absolute bottom-2 right-2 text-[10px] font-bold opacity-70 rotate-180">
+                       {color.substring(0,1).toUpperCase()}
+                   </div>
                 </div>
               </button>
             ))}
@@ -340,34 +381,43 @@ export default function App() {
 
       {/* Challenge Result Modal */}
       {challengeResult && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-          <div className="bg-neutral-900 border border-neutral-700 p-8 rounded-2xl max-w-md w-full text-center shadow-2xl transform animate-in zoom-in duration-200">
-             <h2 className="text-3xl font-bold mb-6">Challenge!</h2>
-             <div className="flex justify-center items-center gap-8 mb-8">
-                 <div className="text-center">
-                     <p className="text-sm text-neutral-400 mb-2">Declared</p>
-                     <div className={`w-16 h-16 rounded-xl border-4 mx-auto flex items-center justify-center ${getColorClasses(challengeResult.declaredColor)}`}>
-                         {challengeResult.declaredColor === 'sun' && '☀️'}
-                         {challengeResult.declaredColor === 'leaf' && '🍃'}
-                         {challengeResult.declaredColor === 'water' && '💧'}
+        <div className="fixed inset-0 bg-obsidian/90 backdrop-blur-md flex items-center justify-center z-50 p-4">
+          <div className="glass-panel p-10 rounded-2xl max-w-lg w-full text-center transform animate-in zoom-in duration-300">
+             <h2 className="font-serif text-4xl font-bold mb-8 text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">Challenge Revealed!</h2>
+
+             <div className="flex justify-center items-center gap-6 mb-10">
+                 <div className="flex-1 flex flex-col items-center">
+                     <p className="text-xs text-gold/70 font-bold uppercase tracking-widest mb-3">Claimed</p>
+                     <div className={`w-20 h-28 rounded-xl border-2 flex items-center justify-center ${getColorClasses(challengeResult.declaredColor)}`}>
+                         <span className="text-4xl">
+                           {challengeResult.declaredColor === 'sun' && '☀️'}
+                           {challengeResult.declaredColor === 'leaf' && '🍃'}
+                           {challengeResult.declaredColor === 'water' && '💧'}
+                         </span>
                      </div>
                  </div>
-                 <div className="text-2xl font-bold text-neutral-500">VS</div>
-                 <div className="text-center">
-                     <p className="text-sm text-neutral-400 mb-2">Actual</p>
-                     <div className={`w-16 h-16 rounded-xl border-4 mx-auto flex items-center justify-center ${getColorClasses(challengeResult.actualColor)}`}>
-                         {challengeResult.actualColor === 'sun' && '☀️'}
-                         {challengeResult.actualColor === 'leaf' && '🍃'}
-                         {challengeResult.actualColor === 'water' && '💧'}
+                 <div className="text-3xl font-serif font-bold text-primary/50 italic">VS</div>
+                 <div className="flex-1 flex flex-col items-center">
+                     <p className="text-xs text-gold/70 font-bold uppercase tracking-widest mb-3">Truth</p>
+                     <div className={`w-20 h-28 rounded-xl border-2 flex items-center justify-center ${getColorClasses(challengeResult.actualColor)}`}>
+                         <span className="text-4xl">
+                           {challengeResult.actualColor === 'sun' && '☀️'}
+                           {challengeResult.actualColor === 'leaf' && '🍃'}
+                           {challengeResult.actualColor === 'water' && '💧'}
+                         </span>
                      </div>
                  </div>
              </div>
 
-             <div className={`text-xl font-bold py-3 rounded-lg ${challengeResult.isBluff ? 'bg-red-500/20 text-red-400' : 'bg-green-500/20 text-green-400'}`}>
-                {challengeResult.isBluff ? 'IT WAS A BLUFF!' : 'IT WAS TRUE!'}
+             <div className={`text-3xl font-serif italic py-4 rounded-xl border mb-6
+                ${challengeResult.isBluff
+                    ? 'bg-green-900/40 text-green-400 border-green-500/50 shadow-[0_0_20px_rgba(74,222,128,0.3)]'
+                    : 'bg-red-900/40 text-red-400 border-red-500/50 shadow-[0_0_20px_rgba(248,113,113,0.3)]'}`}>
+                {challengeResult.isBluff ? 'A Deception Uncovered!' : 'An Honest Play!'}
              </div>
-             <p className="mt-4 text-neutral-300">
-                {gameState.players.find(p=>p.id === challengeResult.punishedPlayerId)?.name} will be punished.
+
+             <p className="text-lg text-primary/80">
+                <strong className="text-white">{gameState.players.find(p=>p.id === challengeResult.punishedPlayerId)?.name}</strong> faces judgment.
              </p>
           </div>
         </div>
@@ -375,25 +425,25 @@ export default function App() {
 
       {/* Punishment Phase Modal */}
       {isPunishmentPhase && !challengeResult && (
-        <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
-          <div className="text-center max-w-2xl w-full">
-            <h2 className="text-3xl font-bold text-red-500 mb-2">Punishment Phase</h2>
-            <p className="text-xl text-neutral-300 mb-12">
-              {amIPunished ? 'You must draw a card!' : `${gameState.players.find(p=>p.id === gameState.punishedPlayerId)?.name} is drawing a card...`}
+        <div className="fixed inset-0 bg-obsidian/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
+          <div className="text-center max-w-3xl w-full">
+            <h2 className="font-serif text-5xl font-bold text-red-500 mb-4 drop-shadow-[0_0_15px_rgba(239,68,68,0.4)]">Judgment Phase</h2>
+            <p className="text-2xl text-primary mb-16 font-serif italic">
+              {amIPunished ? 'Select your fate...' : `${gameState.players.find(p=>p.id === gameState.punishedPlayerId)?.name} is drawing from the abyss...`}
             </p>
 
-            <div className="flex justify-center gap-4">
+            <div className="flex justify-center gap-6 flex-wrap">
               {gameState.punishmentDeck.map((_, idx) => (
                 <button
                   key={idx}
                   onClick={() => amIPunished && handleDrawPunishment(idx)}
                   disabled={!amIPunished}
-                  className={`relative w-24 h-36 rounded-xl border-2 border-red-900 bg-neutral-800 transition-all duration-300
-                    ${amIPunished ? 'hover:-translate-y-2 hover:border-red-500 cursor-pointer shadow-[0_0_15px_rgba(239,68,68,0.2)]' : 'opacity-80 cursor-not-allowed'}
+                  className={`group relative w-32 h-48 rounded-2xl bg-gradient-to-br from-[#2D1B4D] to-[#0F0A1A] border border-red-900/50 transition-all duration-300
+                    ${amIPunished ? 'hover:-translate-y-4 hover:border-red-500 hover:shadow-[0_0_30px_rgba(239,68,68,0.4)] cursor-pointer' : 'opacity-80 cursor-not-allowed'}
                   `}
                 >
-                   <div className="absolute inset-2 border border-red-900/50 rounded-lg flex items-center justify-center bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-neutral-800 to-neutral-900">
-                      <span className="text-red-900/30 text-4xl font-serif">P</span>
+                   <div className="absolute inset-2 border border-red-900/30 rounded-xl flex items-center justify-center bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+CjxwYXRoIGQ9Ik0wLDBMMjAsMjBMMTAsMjBMMSwwWiIgZmlsbD0icmdiYSgyMzksIDY4LCA2OCwgMC4wNSkiLz4KPC9zdmc+')]">
+                      <span className={`text-red-900/40 font-serif text-5xl transition-colors ${amIPunished ? 'group-hover:text-red-500/60' : ''}`}>☠️</span>
                    </div>
                 </button>
               ))}
@@ -404,16 +454,16 @@ export default function App() {
 
       {/* Punishment Result overlay */}
       {punishmentResult && (
-         <div className="fixed inset-0 flex items-center justify-center z-[60] pointer-events-none">
-             <div className="bg-neutral-900 border border-neutral-700 p-8 rounded-2xl shadow-2xl text-center transform animate-in zoom-in duration-300">
-                 <div className={`text-6xl mb-4 ${punishmentResult.drawnCard === 'penalty' ? 'text-red-500' : 'text-green-500'}`}>
+         <div className="fixed inset-0 flex items-center justify-center z-[60] pointer-events-none bg-obsidian/50 backdrop-blur-sm">
+             <div className="glass-panel p-12 rounded-3xl shadow-[0_0_50px_rgba(0,0,0,0.8)] text-center transform animate-in zoom-in duration-300 border-2">
+                 <div className={`text-8xl mb-6 drop-shadow-2xl ${punishmentResult.drawnCard === 'penalty' ? 'text-red-500' : 'text-green-500'}`}>
                      {punishmentResult.drawnCard === 'penalty' ? '☠️' : '🛡️'}
                  </div>
-                 <h3 className="text-2xl font-bold mb-2">
-                     {punishmentResult.drawnCard === 'penalty' ? '+1 Penalty Point' : 'Safe!'}
+                 <h3 className={`font-serif text-4xl font-bold mb-4 ${punishmentResult.drawnCard === 'penalty' ? 'text-red-400' : 'text-green-400'}`}>
+                     {punishmentResult.drawnCard === 'penalty' ? 'Damnation!' : 'Salvation!'}
                  </h3>
-                 <p className="text-neutral-400">
-                     Total points: {punishmentResult.newTotal} / 3
+                 <p className="text-primary text-xl">
+                     Total points: <strong className="text-white">{punishmentResult.newTotal} / 3</strong>
                  </p>
              </div>
          </div>
