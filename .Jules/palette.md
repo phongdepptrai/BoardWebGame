@@ -1,0 +1,3 @@
+## 2024-05-16 - Accessible Card Interactions
+**Learning:** Visual-heavy game interfaces often neglect keyboard users, leaving them unable to tell which card they are about to interact with. A simple `hover` state is not enough. Screen readers also need to know when game states change, which isn't native to basic DOM updates without live regions.
+**Action:** Replicate custom hover transformations (like translation and shadow adjustments on game cards) with `focus-visible` to ensure keyboard navigation feels identical to mouse use. Always wrap core game status messaging in `aria-live="polite" aria-atomic="true"` containers to ensure turn changes are naturally announced.
