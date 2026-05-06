@@ -379,7 +379,11 @@ export default function App() {
         </div>
 
         {/* Status Message */}
-        <div className="absolute bottom-16 left-1/2 -translate-x-1/2 h-10 text-center flex items-center justify-center z-20 whitespace-nowrap w-full">
+        <div
+          className="absolute bottom-16 left-1/2 -translate-x-1/2 h-10 text-center flex items-center justify-center z-20 whitespace-nowrap w-full"
+          aria-live="polite"
+          aria-atomic="true"
+        >
           {isMyTurn ? (
              <span className="text-amber font-serif italic text-2xl drop-shadow-[0_0_10px_rgba(255,191,0,0.8)]">
                 The floor is yours. Make a claim {gameState.pile.length > 0 && 'or challenge the lie'}.
@@ -409,9 +413,10 @@ export default function App() {
                 key={idx}
                 onClick={() => handlePlayCard(idx)}
                 disabled={!isMyTurn}
+                aria-label={`Play ${color} card`}
                 className={`group relative w-24 h-36 sm:w-32 sm:h-48 rounded-2xl border-2 transition-all duration-300 transform-gpu
                   ${getColorClasses(color)}
-                  ${isMyTurn ? 'hover:-translate-y-12 hover:shadow-[0_20px_40px_rgba(0,0,0,0.8)] hover:z-50 cursor-pointer' : 'opacity-70 cursor-not-allowed saturate-50'}
+                  ${isMyTurn ? 'hover:-translate-y-12 hover:shadow-[0_20px_40px_rgba(0,0,0,0.8)] hover:z-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-gold focus-visible:-translate-y-12 focus-visible:z-50 cursor-pointer' : 'opacity-70 cursor-not-allowed saturate-50'}
                 `}
                 style={{
                    transform: `rotate(${rotation}deg) translateY(${translateY}px)`,

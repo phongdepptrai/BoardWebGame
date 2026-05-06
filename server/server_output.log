@@ -1,0 +1,7 @@
+
+> server@1.0.0 start /app/server
+> node server.js
+
+Server listening on port 3000
+User connected: oneUCOQOV7m8KUBJAAAB
+User disconnected: oneUCOQOV7m8KUBJAAAB
