@@ -96,8 +96,9 @@ export default function App() {
 
           <div className="space-y-8 text-left">
             <div>
-              <label className="block text-xs font-bold text-gold/70 uppercase tracking-widest mb-2">Alias</label>
+              <label htmlFor="playerName" className="block text-xs font-bold text-gold/70 uppercase tracking-widest mb-2">Alias</label>
               <input
+                id="playerName"
                 type="text"
                 value={playerName}
                 onChange={(e) => setPlayerName(e.target.value)}
@@ -109,7 +110,8 @@ export default function App() {
             <div className="pt-6 border-t border-deep-purple/50">
               <button
                 onClick={handleCreateRoom}
-                className="w-full btn-magic py-4 rounded-lg flex items-center justify-center gap-2 text-lg mb-6 hover:animate-pulse-glow"
+                disabled={!playerName.trim()}
+                className="w-full btn-magic py-4 rounded-lg flex items-center justify-center gap-2 text-lg mb-6 hover:animate-pulse-glow disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:shadow-none disabled:hover:shadow-none"
               >
                 <PlusCircle size={22} /> Create New Room
               </button>
@@ -123,6 +125,7 @@ export default function App() {
               <div className="mt-6 flex flex-col gap-3">
                 <input
                   type="text"
+                  aria-label="Room Code"
                   value={joinRoomId}
                   onChange={(e) => setJoinRoomId(e.target.value)}
                   className="w-full glass-input text-white rounded-t-lg px-4 py-3 text-center uppercase tracking-widest focus:outline-none"
@@ -131,7 +134,8 @@ export default function App() {
                 />
                 <button
                   onClick={handleJoinRoom}
-                  className="w-full btn-ghost py-3 rounded-lg flex items-center justify-center gap-2 font-medium"
+                  disabled={!playerName.trim() || !joinRoomId.trim()}
+                  className="w-full btn-ghost py-3 rounded-lg flex items-center justify-center gap-2 font-medium disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:shadow-none"
                 >
                   <LogIn size={20} /> Join Room
                 </button>
