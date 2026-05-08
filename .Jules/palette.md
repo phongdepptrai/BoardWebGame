@@ -1,0 +1,3 @@
+## 2024-05-14 - Empty state buttons and missing A11y attributes
+**Learning:** Found that when interacting with empty state inputs, buttons for those actions did not have visual disabled states or disabled HTML attributes, allowing clicks when forms were empty. A11y attributes like `htmlFor`, `id`, and `aria-label` were missing.
+**Action:** Added `disabled:opacity-50 disabled:cursor-not-allowed` styles along with disabled attributes bound to React state for submit buttons. Also added `htmlFor` on the alias label linking to the input `id` and added an `aria-label` to the join room code input since it didn't have an explicit label. Focus states were also added.
