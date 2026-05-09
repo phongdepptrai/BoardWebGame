@@ -1,0 +1,3 @@
+## 2024-05-10 - Form Accessibility and Disabled States
+**Learning:** Empty form submissions can be confusing. Buttons should clearly communicate when they cannot be clicked by combining `disabled` properties with visual opacity and cursor adjustments, which provides a more robust user experience than relying solely on JavaScript to ignore empty fields. Additionally, all inputs require labels for screen readers; if a visual label isn't present, `aria-label` must be used, and if one is, `htmlFor` combined with `id` must associate them.
+**Action:** Always check form controls for `disabled` states when required fields are present, and verify label association on inputs.
