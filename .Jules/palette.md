@@ -1,0 +1,3 @@
+## 2024-05-11 - Login Screen Accessibility
+**Learning:** In the Arcane Parlor login screen, form inputs lacked explicit visual association (`htmlFor` / `id`), and some lacked ARIA labels when visual labels were missing (e.g., Room Code). Disabled states were also missing on primary actions when inputs were empty, causing confusion.
+**Action:** Always associate `<label>` tags with inputs using `htmlFor` and `id`, add `aria-label` when visual labels are absent, and use `disabled` attributes with clear visual styling (e.g., `disabled:opacity-50 disabled:cursor-not-allowed`) for empty required fields. Additionally, always ensure `focus-visible` styles are set for keyboard users.
