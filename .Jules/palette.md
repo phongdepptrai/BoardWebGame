@@ -1,0 +1,3 @@
+## 2024-11-23 - Implicit Login Validation UX
+**Learning:** The login form relied on implicit interactions without form labels or disabled state validation. The lack of visual disabled states meant users could click "Create Room" or "Join Room" with empty inputs and experience silent failures. The absence of `htmlFor` and an explicit "Room Code" label also hurt screen-reader accessibility.
+**Action:** Always link labels to inputs with `htmlFor`/`id` pairs (using `sr-only` if visual design excludes a label). Additionally, add disabled states (`disabled:opacity-50 disabled:cursor-not-allowed`) to primary action buttons that require form validation.
