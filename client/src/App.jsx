@@ -96,8 +96,9 @@ export default function App() {
 
           <div className="space-y-8 text-left">
             <div>
-              <label className="block text-xs font-bold text-gold/70 uppercase tracking-widest mb-2">Alias</label>
+              <label htmlFor="playerName" className="block text-xs font-bold text-gold/70 uppercase tracking-widest mb-2">Alias</label>
               <input
+                id="playerName"
                 type="text"
                 value={playerName}
                 onChange={(e) => setPlayerName(e.target.value)}
@@ -109,7 +110,8 @@ export default function App() {
             <div className="pt-6 border-t border-deep-purple/50">
               <button
                 onClick={handleCreateRoom}
-                className="w-full btn-magic py-4 rounded-lg flex items-center justify-center gap-2 text-lg mb-6 hover:animate-pulse-glow"
+                disabled={!playerName.trim()}
+                className="w-full btn-magic py-4 rounded-lg flex items-center justify-center gap-2 text-lg mb-6 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none hover:animate-pulse-glow"
               >
                 <PlusCircle size={22} /> Create New Room
               </button>
@@ -122,6 +124,7 @@ export default function App() {
 
               <div className="mt-6 flex flex-col gap-3">
                 <input
+                  aria-label="Room Code"
                   type="text"
                   value={joinRoomId}
                   onChange={(e) => setJoinRoomId(e.target.value)}
@@ -131,7 +134,8 @@ export default function App() {
                 />
                 <button
                   onClick={handleJoinRoom}
-                  className="w-full btn-ghost py-3 rounded-lg flex items-center justify-center gap-2 font-medium"
+                  disabled={!playerName.trim() || !joinRoomId.trim()}
+                  className="w-full btn-ghost py-3 rounded-lg flex items-center justify-center gap-2 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <LogIn size={20} /> Join Room
                 </button>
@@ -407,6 +411,7 @@ export default function App() {
               return (
               <button
                 key={idx}
+                aria-label={"Play " + color + " card"}
                 onClick={() => handlePlayCard(idx)}
                 disabled={!isMyTurn}
                 className={`group relative w-24 h-36 sm:w-32 sm:h-48 rounded-2xl border-2 transition-all duration-300 transform-gpu
@@ -514,6 +519,7 @@ export default function App() {
               {gameState.punishmentDeck.map((_, idx) => (
                 <button
                   key={idx}
+                  aria-label={"Draw punishment card " + (idx + 1)}
                   onClick={() => amIPunished && handleDrawPunishment(idx)}
                   disabled={!amIPunished}
                   className={`group relative w-32 h-48 rounded-2xl bg-gradient-to-br from-[#2D1B4D] to-[#0F0A1A] border border-red-900/50 transition-all duration-300
