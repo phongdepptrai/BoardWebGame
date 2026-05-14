@@ -407,9 +407,10 @@ export default function App() {
               return (
               <button
                 key={idx}
+                aria-label={`Play ${color} card`}
                 onClick={() => handlePlayCard(idx)}
                 disabled={!isMyTurn}
-                className={`group relative w-24 h-36 sm:w-32 sm:h-48 rounded-2xl border-2 transition-all duration-300 transform-gpu
+                className={`group relative w-24 h-36 sm:w-32 sm:h-48 rounded-2xl border-2 transition-all duration-300 transform-gpu focus-visible:ring-4 focus-visible:ring-gold focus-visible:outline-none
                   ${getColorClasses(color)}
                   ${isMyTurn ? 'hover:-translate-y-12 hover:shadow-[0_20px_40px_rgba(0,0,0,0.8)] hover:z-50 cursor-pointer' : 'opacity-70 cursor-not-allowed saturate-50'}
                 `}
@@ -514,9 +515,10 @@ export default function App() {
               {gameState.punishmentDeck.map((_, idx) => (
                 <button
                   key={idx}
+                  aria-label={`Draw punishment card ${idx + 1}`}
                   onClick={() => amIPunished && handleDrawPunishment(idx)}
                   disabled={!amIPunished}
-                  className={`group relative w-32 h-48 rounded-2xl bg-gradient-to-br from-[#2D1B4D] to-[#0F0A1A] border border-red-900/50 transition-all duration-300
+                  className={`group relative w-32 h-48 rounded-2xl bg-gradient-to-br from-[#2D1B4D] to-[#0F0A1A] border border-red-900/50 transition-all duration-300 focus-visible:ring-4 focus-visible:ring-red-500 focus-visible:outline-none
                     ${amIPunished ? 'hover:-translate-y-4 hover:border-red-500 hover:shadow-[0_0_30px_rgba(239,68,68,0.4)] cursor-pointer' : 'opacity-80 cursor-not-allowed'}
                   `}
                 >
