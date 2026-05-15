@@ -96,8 +96,9 @@ export default function App() {
 
           <div className="space-y-8 text-left">
             <div>
-              <label className="block text-xs font-bold text-gold/70 uppercase tracking-widest mb-2">Alias</label>
+              <label htmlFor="playerName" className="block text-xs font-bold text-gold/70 uppercase tracking-widest mb-2">Alias</label>
               <input
+                id="playerName"
                 type="text"
                 value={playerName}
                 onChange={(e) => setPlayerName(e.target.value)}
@@ -123,6 +124,7 @@ export default function App() {
               <div className="mt-6 flex flex-col gap-3">
                 <input
                   type="text"
+                  aria-label="Room Code"
                   value={joinRoomId}
                   onChange={(e) => setJoinRoomId(e.target.value)}
                   className="w-full glass-input text-white rounded-t-lg px-4 py-3 text-center uppercase tracking-widest focus:outline-none"
@@ -180,6 +182,7 @@ export default function App() {
             <button
               onClick={handleStartGame}
               disabled={gameState.players.length < 2}
+              title={gameState.players.length < 2 ? "Need at least 2 players to start" : "Start the game"}
               className="w-full btn-magic py-4 rounded-lg flex items-center justify-center gap-2 text-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none"
             >
               <Play size={20} /> Begin Game
@@ -407,6 +410,7 @@ export default function App() {
               return (
               <button
                 key={idx}
+                aria-label={`Play ${color} card`}
                 onClick={() => handlePlayCard(idx)}
                 disabled={!isMyTurn}
                 className={`group relative w-24 h-36 sm:w-32 sm:h-48 rounded-2xl border-2 transition-all duration-300 transform-gpu
@@ -514,6 +518,7 @@ export default function App() {
               {gameState.punishmentDeck.map((_, idx) => (
                 <button
                   key={idx}
+                  aria-label="Draw punishment card"
                   onClick={() => amIPunished && handleDrawPunishment(idx)}
                   disabled={!amIPunished}
                   className={`group relative w-32 h-48 rounded-2xl bg-gradient-to-br from-[#2D1B4D] to-[#0F0A1A] border border-red-900/50 transition-all duration-300
