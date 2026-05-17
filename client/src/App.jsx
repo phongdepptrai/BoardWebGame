@@ -96,8 +96,9 @@ export default function App() {
 
           <div className="space-y-8 text-left">
             <div>
-              <label className="block text-xs font-bold text-gold/70 uppercase tracking-widest mb-2">Alias</label>
+              <label htmlFor="alias-input" className="block text-xs font-bold text-gold/70 uppercase tracking-widest mb-2">Alias</label>
               <input
+                id="alias-input"
                 type="text"
                 value={playerName}
                 onChange={(e) => setPlayerName(e.target.value)}
@@ -128,6 +129,7 @@ export default function App() {
                   className="w-full glass-input text-white rounded-t-lg px-4 py-3 text-center uppercase tracking-widest focus:outline-none"
                   placeholder="ROOM CODE"
                   maxLength={6}
+                  aria-label="Room Code"
                 />
                 <button
                   onClick={handleJoinRoom}
@@ -409,6 +411,7 @@ export default function App() {
                 key={idx}
                 onClick={() => handlePlayCard(idx)}
                 disabled={!isMyTurn}
+                aria-label={`Play ${color} card`}
                 className={`group relative w-24 h-36 sm:w-32 sm:h-48 rounded-2xl border-2 transition-all duration-300 transform-gpu
                   ${getColorClasses(color)}
                   ${isMyTurn ? 'hover:-translate-y-12 hover:shadow-[0_20px_40px_rgba(0,0,0,0.8)] hover:z-50 cursor-pointer' : 'opacity-70 cursor-not-allowed saturate-50'}
@@ -516,6 +519,7 @@ export default function App() {
                   key={idx}
                   onClick={() => amIPunished && handleDrawPunishment(idx)}
                   disabled={!amIPunished}
+                  aria-label={`Draw punishment card ${idx + 1}`}
                   className={`group relative w-32 h-48 rounded-2xl bg-gradient-to-br from-[#2D1B4D] to-[#0F0A1A] border border-red-900/50 transition-all duration-300
                     ${amIPunished ? 'hover:-translate-y-4 hover:border-red-500 hover:shadow-[0_0_30px_rgba(239,68,68,0.4)] cursor-pointer' : 'opacity-80 cursor-not-allowed'}
                   `}

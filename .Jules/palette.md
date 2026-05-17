@@ -1,0 +1,3 @@
+## 2024-05-17 - Accessible Visual Game Cards
+**Learning:** Highly visual game components (like playing cards or punishment tokens) that function as buttons often rely solely on visual cues (colors, emojis, positioning) to convey meaning, making them completely inaccessible to screen reader users. The context of "what this button does" is lost without explicit labels.
+**Action:** Always add descriptive `aria-label` attributes to visually stylized buttons, especially dynamically generated ones (e.g., `aria-label={"Play " + color + " card"}` or `aria-label={"Draw punishment card " + (index + 1)}`). Additionally, ensure all custom input fields are properly associated with their labels using `htmlFor` and `id`, even if they are grouped visually.
