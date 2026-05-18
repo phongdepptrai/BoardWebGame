@@ -96,8 +96,9 @@ export default function App() {
 
           <div className="space-y-8 text-left">
             <div>
-              <label className="block text-xs font-bold text-gold/70 uppercase tracking-widest mb-2">Alias</label>
+              <label htmlFor="playerName" className="block text-xs font-bold text-gold/70 uppercase tracking-widest mb-2">Alias</label>
               <input
+                id="playerName"
                 type="text"
                 value={playerName}
                 onChange={(e) => setPlayerName(e.target.value)}
@@ -122,6 +123,7 @@ export default function App() {
 
               <div className="mt-6 flex flex-col gap-3">
                 <input
+                  aria-label="Room Code"
                   type="text"
                   value={joinRoomId}
                   onChange={(e) => setJoinRoomId(e.target.value)}
@@ -406,6 +408,7 @@ export default function App() {
 
               return (
               <button
+                aria-label={`Play ${color} card`}
                 key={idx}
                 onClick={() => handlePlayCard(idx)}
                 disabled={!isMyTurn}
@@ -513,6 +516,7 @@ export default function App() {
             <div className="flex justify-center gap-6 flex-wrap">
               {gameState.punishmentDeck.map((_, idx) => (
                 <button
+                  aria-label="Draw punishment card"
                   key={idx}
                   onClick={() => amIPunished && handleDrawPunishment(idx)}
                   disabled={!amIPunished}
