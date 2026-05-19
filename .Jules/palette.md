@@ -1,0 +1,3 @@
+## 2026-05-19 - Accessibility for Icon-Only Cards
+**Learning:** In highly visual game interfaces, elements like playable cards or action decks often rely entirely on colors or emojis (e.g., a skull for punishment, a sun/leaf/water drop for elements). These act as icon-only buttons, making them completely inaccessible to screen reader users who cannot see the visual cues.
+**Action:** Always ensure that any interactive game element that relies purely on visual design (like cards) includes an explicit `aria-label` that describes its action and content (e.g., `aria-label="Play sun card"` or `aria-label="Draw punishment card"`).
