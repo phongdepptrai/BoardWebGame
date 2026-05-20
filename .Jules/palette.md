@@ -1,0 +1,3 @@
+## 2024-05-20 - Missing Keyboard Focus Indicators
+**Learning:** Found an accessibility issue pattern specific to this app's input fields: `focus:outline-none` was used without providing a fallback focus indicator for keyboard users, leading to inputs disappearing when tabbed into. Additionally, some inputs lacked proper programmatic label associations.
+**Action:** Always pair `focus:outline-none` with `focus-visible` states (like `focus-visible:ring-2 focus-visible:ring-gold/50`) to ensure keyboard users can see what element they are focused on. Ensure all inputs have either a connected `<label>` (using `htmlFor` and `id`) or an `aria-label` attribute if the visual label is omitted.
