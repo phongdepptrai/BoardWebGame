@@ -96,12 +96,13 @@ export default function App() {
 
           <div className="space-y-8 text-left">
             <div>
-              <label className="block text-xs font-bold text-gold/70 uppercase tracking-widest mb-2">Alias</label>
+              <label htmlFor="alias-input" className="block text-xs font-bold text-gold/70 uppercase tracking-widest mb-2">Alias</label>
               <input
+                id="alias-input"
                 type="text"
                 value={playerName}
                 onChange={(e) => setPlayerName(e.target.value)}
-                className="w-full glass-input text-white rounded-t-lg px-4 py-3 focus:outline-none"
+                className="w-full glass-input text-white rounded-t-lg px-4 py-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/50"
                 placeholder="Enter your name"
               />
             </div>
@@ -125,7 +126,8 @@ export default function App() {
                   type="text"
                   value={joinRoomId}
                   onChange={(e) => setJoinRoomId(e.target.value)}
-                  className="w-full glass-input text-white rounded-t-lg px-4 py-3 text-center uppercase tracking-widest focus:outline-none"
+                  aria-label="Room Code"
+                  className="w-full glass-input text-white rounded-t-lg px-4 py-3 text-center uppercase tracking-widest focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/50"
                   placeholder="ROOM CODE"
                   maxLength={6}
                 />
