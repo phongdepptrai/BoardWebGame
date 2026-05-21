@@ -1,0 +1,3 @@
+## 2026-05-21 - [Focus-Visible Styles]
+**Learning:** When using `focus:outline-none` in this design system to remove default browser rings from styled interactive elements (like game cards and custom inputs), keyboard navigation becomes completely invisible. It is critical to pair it with `focus-visible:ring-*` (e.g., `focus-visible:ring-2 focus-visible:ring-gold/50`) to ensure elements remain accessible to keyboard users while maintaining visual polish for pointer users.
+**Action:** Always append appropriate `focus-visible:ring-*` utility classes when using `focus:outline-none` on custom interactive elements.
