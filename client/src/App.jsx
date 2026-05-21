@@ -96,12 +96,13 @@ export default function App() {
 
           <div className="space-y-8 text-left">
             <div>
-              <label className="block text-xs font-bold text-gold/70 uppercase tracking-widest mb-2">Alias</label>
+              <label htmlFor="alias" className="block text-xs font-bold text-gold/70 uppercase tracking-widest mb-2">Alias</label>
               <input
+                id="alias"
                 type="text"
                 value={playerName}
                 onChange={(e) => setPlayerName(e.target.value)}
-                className="w-full glass-input text-white rounded-t-lg px-4 py-3 focus:outline-none"
+                className="w-full glass-input text-white rounded-t-lg px-4 py-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/50"
                 placeholder="Enter your name"
               />
             </div>
@@ -109,7 +110,8 @@ export default function App() {
             <div className="pt-6 border-t border-deep-purple/50">
               <button
                 onClick={handleCreateRoom}
-                className="w-full btn-magic py-4 rounded-lg flex items-center justify-center gap-2 text-lg mb-6 hover:animate-pulse-glow"
+                disabled={!playerName.trim()}
+                className="w-full btn-magic py-4 rounded-lg flex items-center justify-center gap-2 text-lg mb-6 hover:animate-pulse-glow disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none"
               >
                 <PlusCircle size={22} /> Create New Room
               </button>
@@ -122,16 +124,18 @@ export default function App() {
 
               <div className="mt-6 flex flex-col gap-3">
                 <input
+                  aria-label="Room Code"
                   type="text"
                   value={joinRoomId}
                   onChange={(e) => setJoinRoomId(e.target.value)}
-                  className="w-full glass-input text-white rounded-t-lg px-4 py-3 text-center uppercase tracking-widest focus:outline-none"
+                  className="w-full glass-input text-white rounded-t-lg px-4 py-3 text-center uppercase tracking-widest focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/50"
                   placeholder="ROOM CODE"
                   maxLength={6}
                 />
                 <button
                   onClick={handleJoinRoom}
-                  className="w-full btn-ghost py-3 rounded-lg flex items-center justify-center gap-2 font-medium"
+                  disabled={!playerName.trim() || !joinRoomId.trim()}
+                  className="w-full btn-ghost py-3 rounded-lg flex items-center justify-center gap-2 font-medium disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none"
                 >
                   <LogIn size={20} /> Join Room
                 </button>
@@ -407,9 +411,10 @@ export default function App() {
               return (
               <button
                 key={idx}
+                aria-label={`Play ${color} card`}
                 onClick={() => handlePlayCard(idx)}
                 disabled={!isMyTurn}
-                className={`group relative w-24 h-36 sm:w-32 sm:h-48 rounded-2xl border-2 transition-all duration-300 transform-gpu
+                className={`group relative w-24 h-36 sm:w-32 sm:h-48 rounded-2xl border-2 transition-all duration-300 transform-gpu focus:outline-none focus-visible:ring-4 focus-visible:ring-gold/80 focus-visible:z-50
                   ${getColorClasses(color)}
                   ${isMyTurn ? 'hover:-translate-y-12 hover:shadow-[0_20px_40px_rgba(0,0,0,0.8)] hover:z-50 cursor-pointer' : 'opacity-70 cursor-not-allowed saturate-50'}
                 `}
@@ -514,9 +519,10 @@ export default function App() {
               {gameState.punishmentDeck.map((_, idx) => (
                 <button
                   key={idx}
+                  aria-label={`Draw punishment card ${idx + 1}`}
                   onClick={() => amIPunished && handleDrawPunishment(idx)}
                   disabled={!amIPunished}
-                  className={`group relative w-32 h-48 rounded-2xl bg-gradient-to-br from-[#2D1B4D] to-[#0F0A1A] border border-red-900/50 transition-all duration-300
+                  className={`group relative w-32 h-48 rounded-2xl bg-gradient-to-br from-[#2D1B4D] to-[#0F0A1A] border border-red-900/50 transition-all duration-300 focus:outline-none focus-visible:ring-4 focus-visible:ring-red-500
                     ${amIPunished ? 'hover:-translate-y-4 hover:border-red-500 hover:shadow-[0_0_30px_rgba(239,68,68,0.4)] cursor-pointer' : 'opacity-80 cursor-not-allowed'}
                   `}
                 >
