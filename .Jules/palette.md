@@ -1,0 +1,3 @@
+## 2024-05-24 - Input Focus Accessibility
+**Learning:** This app uses `focus:outline-none` on inputs but lacks fallback visual focus states, creating a keyboard accessibility issue. Pairing it with `focus-visible:ring-2 focus-visible:ring-gold/50` restores accessible focus within the existing design system. Additionally, inputs often lack programmatic label associations (`htmlFor`/`id`), or completely lack visually hidden labels (`sr-only`) when a placeholder is used.
+**Action:** When adding or modifying inputs, ensure they have proper `id` to `label` associations (using `sr-only` if no visual label is desired) and always pair `focus:outline-none` with visible focus rings like `focus-visible:ring-2 focus-visible:ring-[color]`.
