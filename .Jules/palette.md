@@ -1,0 +1,3 @@
+## 2024-03-20 - Focus Management and Form Labels
+**Learning:** Found a pattern in the app's components where focus outlines were explicitly stripped (`focus:outline-none`) for visual reasons, but not replaced with accessible alternatives for keyboard users. Additionally, inputs lacked programmatic associations (`id` + `htmlFor`), relying purely on visual proximity.
+**Action:** Always replace stripped default focus outlines with `focus-visible:ring-2 focus-visible:ring-gold/50` to maintain keyboard accessibility while adhering to the design system. Ensure all inputs have proper `id` tags matched with `htmlFor` on labels, adding visually hidden labels (`sr-only`) when design omits visible ones.
