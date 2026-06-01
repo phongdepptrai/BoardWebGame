@@ -1,0 +1,3 @@
+## 2025-02-14 - Input Accessibility with Custom Focus States
+**Learning:** When hiding native focus outlines (`focus:outline-none`) on custom styled inputs, it is critical to provide an alternative focus indicator (like `focus-visible:ring-2`) and ensure full programmatic label association (`htmlFor` / `id`). Even if placeholder text acts as a label visually, a visually hidden label (`sr-only`) is required for screen readers to announce the field's purpose.
+**Action:** Always pair `focus:outline-none` with `focus-visible:ring-*` styles, and always link `<label>` and `<input>` with matching `htmlFor` and `id` properties, using `sr-only` labels for fields without visible labels.
