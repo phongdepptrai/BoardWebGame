@@ -1,0 +1,3 @@
+## 2024-06-04 - Accessible Inputs and Focus Indicators
+**Learning:** Inputs that rely on placeholders for context lack accessibility for screen readers. Using `sr-only` labels linked via `htmlFor` solves this. Additionally, when using `focus:outline-none` for design system consistency, adding visible focus indicators like `focus-visible:ring-2` is critical to maintain proper keyboard accessibility.
+**Action:** Always pair `focus:outline-none` with visible focus indicators (e.g., `focus-visible:ring-2 focus-visible:ring-gold/50`) and ensure inputs have proper programmatic label associations using visually hidden labels (`sr-only`) when a placeholder is used instead of a visible label.
