@@ -1,0 +1,3 @@
+## 2024-05-16 - [Form Accessibility & Focus Visibility]
+**Learning:** Found inputs lacking programmatic label associations and visual focus indicators, impacting screen reader usability and keyboard navigation accessibility. Used visually hidden labels (`sr-only`) for inputs with placeholders to maintain design while ensuring accessibility.
+**Action:** Always verify that inputs have an associated `label` via `htmlFor`/`id` mapping, and use `focus-visible:ring-2 focus-visible:ring-gold/50` alongside `focus:outline-none` for visible keyboard focus states within the design system.
