@@ -1,0 +1,3 @@
+## 2024-02-14 - Input Keyboard Accessibility & Label Association
+**Learning:** When using `focus:outline-none` within this app's design system, inputs become difficult to navigate via keyboard. Additionally, some inputs use placeholders instead of visible labels, which can impair screen reader context.
+**Action:** Always pair `focus:outline-none` with a visible focus indicator like `focus-visible:ring-2 focus-visible:ring-gold/50` for inputs. For inputs with only placeholders, ensure a visually hidden (`sr-only`) label is present and associated programmatically via `htmlFor` and `id` to maintain accessibility.
