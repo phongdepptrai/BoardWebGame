@@ -1,0 +1,3 @@
+## 2026-06-11 - Form Accessibility and Keyboard Interaction
+**Learning:** Relying solely on `focus:outline-none` without a corresponding `focus-visible` utility removes critical visual feedback for keyboard users. Form controls also lacked explicit label associations, and disabled states were missing visual cues.
+**Action:** Applied `htmlFor` and `id` pairs to all form inputs. Used `sr-only` classes to provide hidden labels for inputs lacking visible ones. Replaced `focus:outline-none` with `focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/50` to restore keyboard focus indicators while adhering to the design system.
