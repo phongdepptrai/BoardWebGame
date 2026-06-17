@@ -1,0 +1,3 @@
+## 2024-06-17 - [Accessible Glass Inputs]
+**Learning:** Using `focus:outline-none` on custom glass-styled inputs completely breaks keyboard navigation visibility, making the app inaccessible to power users and screen readers navigating by tab. Additionally, using standalone placeholders without an associated visual or `sr-only` label violates WCAG guidelines for form inputs.
+**Action:** Always pair `focus:outline-none` with an explicit `focus-visible:ring-2` (e.g. `focus-visible:ring-gold/50`) to maintain the project's design system while preserving accessibility. Always map labels using `htmlFor` matching the input `id`, and add a visually hidden `sr-only` label for inputs relying solely on placeholders.
