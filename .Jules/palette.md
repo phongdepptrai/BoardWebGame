@@ -1,0 +1,3 @@
+## 2024-05-23 - Ensuring Accessible Inputs
+**Learning:** When using inputs with placeholders but without visible labels, screen readers need a visually hidden label (`sr-only`) with a matching `htmlFor` and `id` to associate it with the input. Also, using `focus:outline-none` strips keyboard accessibility unless a visible focus indicator like `focus-visible:ring-2 focus-visible:ring-gold/50` is added.
+**Action:** Always provide `sr-only` labels for inputs lacking visible ones, and pair `focus:outline-none` with `focus-visible:ring-2` to maintain accessibility for keyboard users while conforming to the design system.
