@@ -1,0 +1,3 @@
+## 2026-06-27 - [Input Accessibility & Focus States]
+**Learning:** Custom glass-styled inputs relying heavily on `focus:outline-none` can create a poor keyboard navigation experience. Similarly, inputs leaning on `placeholder` attributes for context lack programmatically accessible context for screen readers if no visually hidden label is present.
+**Action:** When overriding default focus rings with `focus:outline-none` on inputs, ensure you provide an alternative visible focus indicator using `focus-visible:ring-2` paired with the appropriate design system color (e.g., `focus-visible:ring-gold/50`). For placeholder-driven inputs, add a `<label className="sr-only">` properly associated via `htmlFor`.
