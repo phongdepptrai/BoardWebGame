@@ -1,0 +1,3 @@
+## 2024-05-18 - Keyboard Accessibility and Form Semantics
+**Learning:** Found that custom `focus:outline-none` glass inputs without explicit `focus-visible` rings remove essential keyboard navigation cues. Furthermore, placeholders are not sufficient substitutes for proper programmatic labels, and icon-based cards lack screen reader context.
+**Action:** Always pair `focus:outline-none` with `focus-visible:ring-2 focus-visible:ring-gold/50` for `glass-input` elements, ensure all inputs have a visually hidden or explicit label with `htmlFor` matching the input's `id`, and provide `aria-label`s for icon-based interactive cards.
