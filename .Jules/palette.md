@@ -1,0 +1,3 @@
+## 2024-03-24 - Accessible Input Labels and Focus States
+**Learning:** Inputs stripped of focus outlines (`focus:outline-none`) must have visible focus indicators (`focus-visible:ring-x`) to remain accessible via keyboard navigation. Additionally, inputs relying solely on placeholders must have programmatic labels (either visual or visually hidden using `sr-only`) to be accessible to screen readers.
+**Action:** Always pair `focus:outline-none` with visible focus indicators (e.g. `focus-visible:ring-2 focus-visible:ring-gold/50`) and ensure all inputs have matching `id` and `htmlFor` attributes on their labels. Use visually hidden labels when a placeholder replaces a standard label.
